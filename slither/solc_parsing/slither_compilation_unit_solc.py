@@ -575,8 +575,19 @@ Please rename it, this name is reserved for Slither's internals"""
                     self._underlying_contract_to_parser[contract].log_incorrect_parsing(
                         f"Impossible to generate IR for {contract.name}.{func.name}"
                     )
+                except AssertionError:
+                    # TODO: Why does this happen?
+                    self._underlying_contract_to_parser[contract].log_incorrect_parsing(
+                        f"Assertion error while generating IR for {contract.name}.{func.name}"
+                    )
 
-            contract.convert_expression_to_slithir_ssa()
+            try:
+                contract.convert_expression_to_slithir_ssa()
+            except AssertionError:
+                # TODO: Why does this happen?
+                self._underlying_contract_to_parser[contract].log_incorrect_parsing(
+                    f"Assertion error while generating IR for {contract.name}.{func.name}"
+                )
 
         for func in self._compilation_unit.functions_top_level:
             func.generate_slithir_and_analyze()
