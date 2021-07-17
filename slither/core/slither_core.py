@@ -185,9 +185,11 @@ class SlitherCore(Context):
         )
 
         for file, lines in mapping_elements_with_lines:
-            ignore_line_index = min(lines) - 1
-            ignore_line_text = self.crytic_compile.get_code_from_line(file, ignore_line_index)
-            if ignore_line_text:
+            for ignore_line_index in [min(lines) - 1] + lines:
+                ignore_line_text = self.crytic_compile.get_code_from_line(file, ignore_line_index)
+                if not ignore_line_text:
+                    continue
+
                 match = re.findall(
                     r"^\s*//\s*slither-disable-next-line\s*([a-zA-Z0-9_,-]*)",
                     ignore_line_text.decode("utf8"),
