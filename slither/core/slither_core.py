@@ -219,9 +219,9 @@ class SlitherCore(Context):
             for elem in r["elements"]
             if "source_mapping" in elem
         ]
-        source_mapping_elements = map(
+        source_mapping_elements = list(map(
             lambda x: os.path.normpath(x) if x else x, source_mapping_elements
-        )
+        ))
         matching = False
 
         for path in self._paths_to_filter:
